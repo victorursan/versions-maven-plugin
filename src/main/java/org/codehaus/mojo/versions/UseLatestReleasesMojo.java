@@ -115,19 +115,15 @@ public class UseLatestReleasesMojo
         }
     }
 
-    private void useLatestReleases( ModifiedPomXMLEventReader pom, Collection dependencies )
+    private void useLatestReleases( ModifiedPomXMLEventReader pom, Collection<Dependency> dependencies )
         throws XMLStreamException, MojoExecutionException, ArtifactMetadataRetrievalException
     {
         int segment = determineUnchangedSegment( allowMajorUpdates, allowMinorUpdates, allowIncrementalUpdates );
         MajorMinorIncrementalFilter majorMinorIncfilter =
                         new MajorMinorIncrementalFilter( allowMajorUpdates, allowMinorUpdates, allowIncrementalUpdates );
 
-        Iterator i = dependencies.iterator();
-
-        while ( i.hasNext() )
+        for ( Dependency dep : dependencies )
         {
-            Dependency dep = (Dependency) i.next();
-
             if ( isExcludeReactor() && isProducedByReactor( dep ) )
             {
                 getLog().info( "Ignoring reactor dependency: " + toString( dep ) );

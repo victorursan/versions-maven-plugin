@@ -30,9 +30,10 @@ import org.codehaus.mojo.versions.api.ArtifactVersions;
 import org.codehaus.mojo.versions.api.PomHelper;
 import org.codehaus.mojo.versions.rewriting.ModifiedPomXMLEventReader;
 
-import javax.xml.stream.XMLStreamException;
 import java.util.Collection;
 import java.util.Iterator;
+
+import javax.xml.stream.XMLStreamException;
 
 /**
  * Replaces any version with the latest version.
@@ -40,7 +41,7 @@ import java.util.Iterator;
  * @author Stephen Connolly
  * @since 1.0-alpha-3
  */
-@Mojo(name = "use-next-versions", requiresProject = true, requiresDirectInvocation = true)
+@Mojo( name = "use-next-versions", requiresProject = true, requiresDirectInvocation = true )
 public class UseNextVersionsMojo
     extends AbstractVersionsDependencyUpdaterMojo
 {
@@ -74,15 +75,11 @@ public class UseNextVersionsMojo
         }
     }
 
-    private void useNextVersions( ModifiedPomXMLEventReader pom, Collection dependencies )
+    private void useNextVersions( ModifiedPomXMLEventReader pom, Collection<Dependency> dependencies )
         throws XMLStreamException, MojoExecutionException, ArtifactMetadataRetrievalException
     {
-        Iterator i = dependencies.iterator();
-
-        while ( i.hasNext() )
+        for ( Dependency dep : dependencies )
         {
-            Dependency dep = (Dependency) i.next();
-
             if ( isExcludeReactor() && isProducedByReactor( dep ) )
             {
                 getLog().info( "Ignoring reactor dependency: " + toString( dep ) );
@@ -97,8 +94,7 @@ public class UseNextVersionsMojo
             }
 
             getLog().debug( "Looking for newer versions of " + toString( dep ) );
-            ArtifactVersions versions =
-                getHelper().lookupArtifactVersions( artifact, false );
+            ArtifactVersions versions = getHelper().lookupArtifactVersions( artifact, false );
             ArtifactVersion[] newer = versions.getNewerVersions( version, Boolean.TRUE.equals( allowSnapshots ) );
             if ( newer.length > 0 )
             {

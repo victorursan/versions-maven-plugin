@@ -40,7 +40,7 @@ import org.codehaus.mojo.versions.rewriting.ModifiedPomXMLEventReader;
  * @author Stephen Connolly
  * @since 2.2
  */
-@Mojo(name = "use-reactor", requiresProject = true, requiresDirectInvocation = true)
+@Mojo( name = "use-reactor", requiresProject = true, requiresDirectInvocation = true )
 public class UseReactorMojo
     extends AbstractVersionsDependencyUpdaterMojo
 {
@@ -88,17 +88,16 @@ public class UseReactorMojo
                 continue;
             }
 
-            for ( Object reactorProject : reactorProjects )
+            for ( MavenProject reactorProject : session.getProjectDependencyGraph().getSortedProjects() )
             {
-                MavenProject project = (MavenProject) reactorProject;
-                if ( StringUtils.equals( project.getGroupId(), dep.getGroupId() )
-                    && StringUtils.equals( project.getArtifactId(), dep.getArtifactId() )
-                    && !StringUtils.equals( project.getVersion(), dep.getVersion() ) )
+                if ( StringUtils.equals( reactorProject.getGroupId(), dep.getGroupId() )
+                    && StringUtils.equals( reactorProject.getArtifactId(), dep.getArtifactId() )
+                    && !StringUtils.equals( reactorProject.getVersion(), dep.getVersion() ) )
                 {
                     if ( PomHelper.setDependencyVersion( pom, dep.getGroupId(), dep.getArtifactId(), dep.getVersion(),
-                                                         project.getVersion() ) )
+                                                         reactorProject.getVersion() ) )
                     {
-                        getLog().info( "Updated " + toString( dep ) + " to version " + project.getVersion() );
+                        getLog().info( "Updated " + toString( dep ) + " to version " + reactorProject.getVersion() );
                     }
                     break;
                 }

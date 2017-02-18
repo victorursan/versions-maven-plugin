@@ -33,12 +33,12 @@ import org.codehaus.mojo.versions.api.PomHelper;
 import org.codehaus.mojo.versions.ordering.VersionComparator;
 import org.codehaus.mojo.versions.rewriting.ModifiedPomXMLEventReader;
 
-import javax.xml.stream.XMLStreamException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.stream.XMLStreamException;
 
 /**
  * Replaces any release versions with the next snapshot version (if it has been deployed).
@@ -46,7 +46,7 @@ import java.util.regex.Pattern;
  * @author Stephen Connolly
  * @since 1.0-beta-1
  */
-@Mojo(name = "use-next-snapshots", requiresProject = true, requiresDirectInvocation = true)
+@Mojo( name = "use-next-snapshots", requiresProject = true, requiresDirectInvocation = true )
 public class UseNextSnapshotsMojo
     extends AbstractVersionsDependencyUpdaterMojo
 {
@@ -56,7 +56,7 @@ public class UseNextSnapshotsMojo
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "allowMajorUpdates", defaultValue = "false")
+    @Parameter( property = "allowMajorUpdates", defaultValue = "false" )
     protected Boolean allowMajorUpdates;
 
     /**
@@ -64,7 +64,7 @@ public class UseNextSnapshotsMojo
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "allowMinorUpdates", defaultValue = "false")
+    @Parameter( property = "allowMinorUpdates", defaultValue = "false" )
     protected Boolean allowMinorUpdates;
 
     /**
@@ -72,7 +72,7 @@ public class UseNextSnapshotsMojo
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "allowIncrementalUpdates", defaultValue = "true")
+    @Parameter( property = "allowIncrementalUpdates", defaultValue = "true" )
     protected Boolean allowIncrementalUpdates;
 
     // ------------------------------ FIELDS ------------------------------
@@ -111,17 +111,13 @@ public class UseNextSnapshotsMojo
         }
     }
 
-    private void useNextSnapshots( ModifiedPomXMLEventReader pom, Collection dependencies )
+    private void useNextSnapshots( ModifiedPomXMLEventReader pom, Collection<Dependency> dependencies )
         throws XMLStreamException, MojoExecutionException, ArtifactMetadataRetrievalException
     {
         int segment = determineUnchangedSegment( allowMajorUpdates, allowMinorUpdates, allowIncrementalUpdates );
 
-        Iterator i = dependencies.iterator();
-
-        while ( i.hasNext() )
+        for ( Dependency dep : dependencies )
         {
-            Dependency dep = (Dependency) i.next();
-
             if ( isExcludeReactor() && isProducedByReactor( dep ) )
             {
                 getLog().info( "Ignoring reactor dependency: " + toString( dep ) );

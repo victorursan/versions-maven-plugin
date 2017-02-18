@@ -100,14 +100,14 @@ public class DisplayDependencyUpdatesMojo
      *         management dependencies.
      * @since 1.0-beta-1
      */
-    private static Set removeDependencyManagment( Set dependencies, Set dependencyManagement )
+    private static Set<Dependency> removeDependencyManagment( Set<Dependency> dependencies, Set<Dependency> dependencyManagement )
     {
-        Set result = new TreeSet( new DependencyComparator() );
-        for ( Iterator i = dependencies.iterator(); i.hasNext(); )
+        Set<Dependency> result = new TreeSet<Dependency>( new DependencyComparator() );
+        for ( Iterator<Dependency> i = dependencies.iterator(); i.hasNext(); )
         {
             Dependency c = (Dependency) i.next();
             boolean matched = false;
-            Iterator j = dependencyManagement.iterator();
+            Iterator<Dependency> j = dependencyManagement.iterator();
             while ( !matched && j.hasNext() )
             {
                 Dependency t = (Dependency) j.next();
@@ -163,7 +163,7 @@ public class DisplayDependencyUpdatesMojo
     {
         logInit();
 
-        Set dependencyManagement = new TreeSet( new DependencyComparator() );
+        Set<Dependency> dependencyManagement = new TreeSet<Dependency>( new DependencyComparator() );
         if ( getProject().getDependencyManagement() != null )
         {
 
@@ -210,7 +210,7 @@ public class DisplayDependencyUpdatesMojo
             }
         }
 
-        Set dependencies = new TreeSet( new DependencyComparator() );
+        Set<Dependency> dependencies = new TreeSet<Dependency>( new DependencyComparator() );
         dependencies.addAll( getProject().getDependencies() );
 
         if ( isProcessingDependencyManagement() )
@@ -240,11 +240,11 @@ public class DisplayDependencyUpdatesMojo
         }
     }
 
-    private void logUpdates( Map updates, String section )
+    private void logUpdates( Map<Dependency, ArtifactVersions> updates, String section )
     {
-        List withUpdates = new ArrayList();
-        List usingCurrent = new ArrayList();
-        Iterator i = updates.values().iterator();
+        List<String> withUpdates = new ArrayList<String>();
+        List<String> usingCurrent = new ArrayList<String>();
+        Iterator<ArtifactVersions> i = updates.values().iterator();
         while ( i.hasNext() )
         {
             ArtifactVersions versions = (ArtifactVersions) i.next();
@@ -271,7 +271,7 @@ public class DisplayDependencyUpdatesMojo
                 }
             }
             String right = " " + ( latest == null ? current : current + " -> " + latest.toString() );
-            List t = latest == null ? usingCurrent : withUpdates;
+            List<String> t = latest == null ? usingCurrent : withUpdates;
             if ( right.length() + left.length() + 3 > INFO_PAD_SIZE )
             {
                 t.add( left + "..." );
@@ -291,10 +291,10 @@ public class DisplayDependencyUpdatesMojo
         else if ( isVerbose() && !usingCurrent.isEmpty() )
         {
             logLine( false, "The following dependencies in " + section + " are using the newest version:" );
-            i = usingCurrent.iterator();
-            while ( i.hasNext() )
+            Iterator<String> currentIter = usingCurrent.iterator();
+            while ( currentIter.hasNext() )
             {
-                logLine( false, (String) i.next() );
+                logLine( false, currentIter.next() );
             }
             logLine( false, "" );
         }
@@ -306,10 +306,10 @@ public class DisplayDependencyUpdatesMojo
         else if ( !withUpdates.isEmpty() )
         {
             logLine( false, "The following dependencies in " + section + " have newer versions:" );
-            i = withUpdates.iterator();
-            while ( i.hasNext() )
+            Iterator<String> withUpdateIter = withUpdates.iterator();
+            while ( withUpdateIter.hasNext() )
             {
-                logLine( false, (String) i.next() );
+                logLine( false, withUpdateIter.next() );
             }
             logLine( false, "" );
         }

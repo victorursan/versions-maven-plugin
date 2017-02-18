@@ -113,7 +113,8 @@ public class DisplayPropertyUpdatesMojo
             }
 
             ArtifactVersion winner = version.getNewestVersion( currentVersion, property, this.allowSnapshots,
-                                                               this.reactorProjects, this.getHelper(), false );
+                                                               session.getProjectDependencyGraph().getSortedProjects(),
+                                                               this.getHelper(), false );
 
             if ( winner != null && !currentVersion.equals( winner.toString() ) )
             {

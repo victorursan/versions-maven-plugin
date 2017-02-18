@@ -30,11 +30,12 @@ import org.codehaus.mojo.versions.api.ArtifactVersions;
 import org.codehaus.mojo.versions.api.PomHelper;
 import org.codehaus.mojo.versions.rewriting.ModifiedPomXMLEventReader;
 
-import javax.xml.stream.XMLStreamException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.stream.XMLStreamException;
 
 /**
  * Replaces any release versions with the next release version (if it has been released).
@@ -42,7 +43,7 @@ import java.util.regex.Pattern;
  * @author Stephen Connolly
  * @since 1.0-alpha-3
  */
-@Mojo(name = "use-next-releases", requiresProject = true, requiresDirectInvocation = true)
+@Mojo( name = "use-next-releases", requiresProject = true, requiresDirectInvocation = true )
 public class UseNextReleasesMojo
     extends AbstractVersionsDependencyUpdaterMojo
 {
@@ -76,15 +77,11 @@ public class UseNextReleasesMojo
         }
     }
 
-    private void useNextReleases( ModifiedPomXMLEventReader pom, Collection dependencies )
+    private void useNextReleases( ModifiedPomXMLEventReader pom, Collection<Dependency> dependencies )
         throws XMLStreamException, MojoExecutionException, ArtifactMetadataRetrievalException
     {
-        Iterator i = dependencies.iterator();
-
-        while ( i.hasNext() )
+        for ( Dependency dep : dependencies )
         {
-            Dependency dep = (Dependency) i.next();
-
             if ( isExcludeReactor() && isProducedByReactor( dep ) )
             {
                 getLog().info( "Ignoring reactor dependency: " + toString( dep ) );

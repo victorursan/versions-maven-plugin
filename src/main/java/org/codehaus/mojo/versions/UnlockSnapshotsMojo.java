@@ -28,11 +28,11 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.mojo.versions.api.PomHelper;
 import org.codehaus.mojo.versions.rewriting.ModifiedPomXMLEventReader;
 
-import javax.xml.stream.XMLStreamException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.stream.XMLStreamException;
 
 /**
  * Attempts to resolve unlocked snapshot dependency versions to the locked timestamp versions used in the build. For
@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
  * @author Paul Gier
  * @since 1.0-alpha-3
  */
-@Mojo(name = "unlock-snapshots", requiresProject = true, requiresDirectInvocation = true)
+@Mojo( name = "unlock-snapshots", requiresProject = true, requiresDirectInvocation = true )
 public class UnlockSnapshotsMojo
     extends AbstractVersionsDependencyUpdaterMojo
 {
@@ -82,14 +82,11 @@ public class UnlockSnapshotsMojo
         }
     }
 
-    private void unlockSnapshots( ModifiedPomXMLEventReader pom, List dependencies )
+    private void unlockSnapshots( ModifiedPomXMLEventReader pom, List<Dependency> dependencies )
         throws XMLStreamException, MojoExecutionException
     {
-        Iterator iter = dependencies.iterator();
-        while ( iter.hasNext() )
+        for ( Dependency dep : dependencies )
         {
-            Dependency dep = (Dependency) iter.next();
-
             if ( isExcludeReactor() && isProducedByReactor( dep ) )
             {
                 getLog().info( "Ignoring reactor dependency: " + toString( dep ) );
@@ -124,7 +121,7 @@ public class UnlockSnapshotsMojo
             return;
         }
 
-        if ( reactorProjects.contains( parent ) )
+        if ( session.getProjectDependencyGraph().getSortedProjects().contains( parent ) )
         {
             getLog().info( "Project's parent is part of the reactor" );
             return;

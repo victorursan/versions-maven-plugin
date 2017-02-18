@@ -22,7 +22,6 @@ package org.codehaus.mojo.versions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -200,10 +199,9 @@ public abstract class AbstractVersionsDependencyUpdaterMojo
         {
             return null;
         }
-        Iterator iter = getProject().getDependencyArtifacts().iterator();
-        while ( iter.hasNext() )
+
+        for ( Artifact artifact : getProject().getDependencyArtifacts() )
         {
-            Artifact artifact = (Artifact) iter.next();
             if ( compare( artifact, dependency ) )
             {
                 return artifact;
@@ -274,15 +272,14 @@ public abstract class AbstractVersionsDependencyUpdaterMojo
      */
     protected boolean isProducedByReactor( Dependency dependency )
     {
-        Iterator iter = reactorProjects.iterator();
-        while ( iter.hasNext() )
+        for ( MavenProject project : session.getProjectDependencyGraph().getSortedProjects() )
         {
-            MavenProject project = (MavenProject) iter.next();
             if ( compare( project, dependency ) )
             {
                 return true;
             }
         }
+        
         return false;
 
     }
@@ -375,7 +372,7 @@ public abstract class AbstractVersionsDependencyUpdaterMojo
     {
         if ( includesFilter == null && ( includes != null || includesList != null ) )
         {
-            List patterns = new ArrayList();
+            List<String> patterns = new ArrayList<String>();
             if ( this.includesList != null )
             {
                 patterns.addAll( separatePatterns( includesList ) );
@@ -393,7 +390,7 @@ public abstract class AbstractVersionsDependencyUpdaterMojo
     {
         if ( excludesFilter == null && ( excludes != null || excludesList != null ) )
         {
-            List patterns = new ArrayList();
+            List<String> patterns = new ArrayList<String>();
             if ( excludesList != null )
             {
                 patterns.addAll( separatePatterns( excludesList ) );
@@ -414,14 +411,14 @@ public abstract class AbstractVersionsDependencyUpdaterMojo
      * @param includeString the string to parse
      * @return list of patterns
      */
-    protected List separatePatterns( String includeString )
+    protected List<String> separatePatterns( String includeString )
     {
         if ( includeString == null )
         {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
-        List patterns = new ArrayList();
+        List<String> patterns = new ArrayList<String>();
         int indexOf = nextCommaIndex( includeString );
         while ( indexOf >= 0 )
         {
