@@ -49,6 +49,14 @@ public abstract class AbstractVersionsDisplayMojo
      *
      * @since 2.2
      */
+    @Parameter(property = "versions.appendOutput", defaultValue = "false")
+    private boolean appendOutput;
+
+    /**
+     * Controls whether the display output is logged to the console.
+     *
+     * @since 2.2
+     */
     @Parameter(property = "versions.logOutput", defaultValue = "true")
     private boolean logOutput;
 
@@ -87,7 +95,7 @@ public abstract class AbstractVersionsDisplayMojo
                 {
                     files = new LinkedHashSet<String>( files );
                 }
-                if ( !files.contains( outputFileName ) )
+                if (!files.contains( outputFileName ) && !appendOutput)
                 {
                     if ( !outputFile.delete() )
                     {
