@@ -475,10 +475,10 @@ public class DisplayDependencyUpdatesMojo
             }
         }
         if (isVerbose() && usingCurrent.isEmpty() && !withUpdates.isEmpty()) {
-            logLine(false, "No dependencies in " + section + " are using the newest version.");
+            logLine(false, String.format("[%s]: No dependencies in %s are using the newest version.", project.getArtifactId(), section));
             logLine(false, "");
         } else if (isVerbose() && !usingCurrent.isEmpty()) {
-            logLine(false, "The following dependencies in " + section + " are using the newest version:");
+            logLine(false, String.format("[%s]: The following dependencies in %s are using the newest version:",  project.getArtifactId(), section));
             i = usingCurrent.iterator();
             while (i.hasNext()) {
                 logLine(false, (String) i.next());
@@ -486,10 +486,10 @@ public class DisplayDependencyUpdatesMojo
             logLine(false, "");
         }
         if (withUpdates.isEmpty() && !usingCurrent.isEmpty()) {
-            logLine(false, "No dependencies in " + section + " have newer versions.");
+            logLine(false, String.format("[%s]: No dependencies in %s have newer versions.", project.getArtifactId(), section));
             logLine(false, "");
         } else if (!withUpdates.isEmpty()) {
-            logLine(false, "The following dependencies in " + section + " have newer versions:");
+            logLine(false, String.format("[%s]: The following dependencies in %s have newer versions:",  project.getArtifactId(), section));
             i = withUpdates.iterator();
             while (i.hasNext()) {
                 logLine(false, (String) i.next());
